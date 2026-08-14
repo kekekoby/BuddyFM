@@ -23,7 +23,7 @@ async function getSession(token) {
 	const params = { api_key: API_KEY, method: 'auth.getSession', token };
 	const api_sig = signRequest(params);
 
-	const web_params = { ...params, format: "url", api_sig: api_sig };
+	const web_params = { ...params, format: "json", api_sig: api_sig };
 	const queryString = new URLSearchParams(web_params).toString();
 	const url = `${BASE_URL}?${queryString}`;
 
@@ -35,8 +35,10 @@ async function getSession(token) {
 
 		const data = await response.json();
 
-		return data.session.key, data.session.name;
-	} catch (error) { console.error(`Fetch error: ${error}`); }
+		try {
+			return { session_key: data.session.key, session_name: data.session.name };
+		} catch (error) { console.error('No session'); return error; }
+	} catch (error) { console.error(`Fetch error: ${error}`); return error; }
 }
 
 module.exports = {
