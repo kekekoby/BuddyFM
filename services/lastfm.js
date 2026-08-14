@@ -18,3 +18,31 @@ function signRequest(params) {
 
 	return api_sig;
 }
+
+async function getSession(token) {
+	const params = { api_key: API_KEY, method: 'auth.getSession', token };
+	const api_sig = signRequest(params);
+
+	const web_params = { ...params, format: "url", api_sig: api_sig };
+	const queryString = new URLSearchParams(web_params).toString();
+	const url = `${BASE_URL}?${queryString}`;
+
+	try {
+		const response = await fetch(url);
+
+		if (!response.ok) {
+			throw new Error(`HTTP error: ${response.status}`); }
+
+		const data = await response.json();
+
+		return data.session.key, data.session.name;
+	} catch (error) { console.error(`Fetch error: ${error}`); }
+}
+
+module.exports = {
+	API_KEY,
+	SHARED_SECRET,
+	BASE_URL,
+	signRequest,
+	getSession,
+};
