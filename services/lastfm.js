@@ -41,6 +41,25 @@ async function getSession(token) {
 	} catch (error) { console.error(`Fetch error: ${error}`); return error; }
 }
 
+async function getRecentTracks(user, from, to) {
+	const params = { api_key: API_KEY, user: user, from: from, to: to, format: 'json' };
+	const queryString = new URLSearchParams(params).toString();
+	const url = `${BASE_URL}?method=user.getrecenttracks&${queryString}`;
+
+	try {
+		const response = await fetch(url);
+
+		if (!response.ok) {
+			throw new Error(`HTTP error: ${response.status}`); }
+
+		const data = await response.json();
+
+		try {
+			return data.recenttracks;
+		} catch (error) { console.error('No session'); return error; }
+	} catch (error) { console.error(`Fetch error: ${error}`); return error; }
+}
+
 module.exports = {
 	API_KEY,
 	SHARED_SECRET,
