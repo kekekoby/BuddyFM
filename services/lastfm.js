@@ -41,7 +41,7 @@ async function getSession(token) {
 	} catch (error) { console.error(`Fetch error: ${error}`); return error; }
 }
 
-async function getRecentTracks(user, from, to) {
+async function getRecentTracks(user, from, to, page) {
 	const params = { api_key: API_KEY, user: user, from: from, to: to, format: 'json' };
 	const queryString = new URLSearchParams(params).toString();
 	const url = `${BASE_URL}?method=user.getrecenttracks&${queryString}`;
@@ -55,9 +55,22 @@ async function getRecentTracks(user, from, to) {
 		const data = await response.json();
 
 		try {
-			return data.recenttracks;
+			return { tracks: data.recenttracks.track, total_pages: parseInt(data.recenttracks['@attr'].totalPages, 10);
 		} catch (error) { console.error('No session'); return error; }
 	} catch (error) { console.error(`Fetch error: ${error}`); return error; }
+}
+
+async function getAllRecentTracks(user, from, to) {
+	let all_tracks = [];
+	let page = 1;
+	let total_pages = 1;
+
+	while (page <= total_pages) {
+		const result = await getRecentTracks(user, from, to, page);
+		all_tracks = all_tracks.concat(result.tracks);
+		total_pages = result.total_pages;
+		page++;
+	}
 }
 
 module.exports = {
