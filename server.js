@@ -5,6 +5,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const session = require('express-session');
 
+const authRoutes = require('./routes/auth.js');
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -12,12 +14,14 @@ app.use(
 	secret: process.env.SESSION_SECRET,
 	resave: false,
 	saveUninitialized: false,
-	cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 }, // 1 week cookie
+	cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 },
   })
 );
 
 const path = require('path');
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/auth', authRoutes);
 
 app.listen(PORT, () => {
 	console.log(`Server running at http://localhost:${PORT}`);
