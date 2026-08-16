@@ -75,9 +75,8 @@ async function getAllRecentTracks(user, from, to) {
 	return all_tracks;
 }
 
+// can only process up to 50 tracks
 async function scrobbleTracks(session_key, tracks) {
-	// can only process up to 50 tracks
-
 	const params = { api_key: API_KEY, sk: session_key, method: 'track.scrobble' };
 
 	tracks.forEach((track, i) => {
