@@ -27,4 +27,25 @@ router.post('/transfer', async (req, res) => {
 	res.json(result);
 });
 
+router.post('/sync/start', async (req, res) => {
+	if (!req.session.username) { return res.status(401).send('Not logged in'); }
+
+	const { source_user } = req.body;
+	const user = db.prepare('SELECT session_key FROM users WHERE lastfm_username = ?').get(req.session.username);
+
+	db.prepare('INSERT OR REPLACE INTO user_connections (to_fetch_user, to_receive_user, status) VALUES (?, ?, ?)')
+		.run(source_user, req.session.username, 'active');
+
+	res.json({ status: 'started', source_user });
+})
+
+router.post('/sync/stop', async (req, res) => {
+	if (!req.session.username) { return res.status(401).send('Not logged in.'); }
+
+	db.prepare("UPDATE user_connections SET status = 'stopped' WHERE to_receive_user = ? AND status = 'active'")
+    	.run(req.session.username);
+
+    res.json({ status: 'stopped', source_user });
+})
+
 module.exports = router;
