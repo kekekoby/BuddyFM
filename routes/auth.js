@@ -24,4 +24,8 @@ router.get('/callback', async (req, res) => {
 	res.redirect(`/`);
 })
 
+router.get('/me', (req, res) => {
+	res.json({ username: req.session.username || null });
+});
+
 module.exports = router;

@@ -19,7 +19,7 @@ router.post('/transfer', async (req, res) => {
 			timestamp: parseInt(track.date.uts, 10),
 	}));
 
-	let result;
+	let result = 0;
 	for (let i = 0; i < formatted_tracks.length; i+= 50) {
 		result = await scrobbleTracks(user.session_key, formatted_tracks.slice(i, i+50));
 	}

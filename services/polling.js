@@ -1,5 +1,5 @@
 const db = require('../db/index.js');
-const { getLatestTrack, scrobbleTracks } = requir('./lastfm.js');
+const { getLatestTrack, scrobbleTracks } = require('./lastfm.js');
 
 async function poll() {
 	const active_sessions = db.prepare("SELECT * FROM user_connections WHERE status = 'active'").all();

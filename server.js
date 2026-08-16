@@ -7,6 +7,7 @@ const session = require('express-session');
 
 const authRoutes = require('./routes/auth.js');
 const scrobbleRoutes = require('./routes/scrobble.js');
+const { startPoll } = require('./services/polling.js');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -24,10 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/auth', authRoutes);
 app.use('/', scrobbleRoutes);
-
-app.get('/debug/session', (req, res) => {
-  res.json({ session: req.session });
-});
+startPoll();
 
 app.listen(PORT, () => {
 	console.log(`Server running at http://localhost:${PORT}`);

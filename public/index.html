@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>BuddyFM</title>
+</head>
+<body>
+	<h1>BuddyFM!</h1>
+
+	<div id="auth-section"></div>
+
+	<hr>
+
+	<h2>Scrobble Transfer</h2>
+	<form id="transfer-form">
+		<input type="text" id="transfer-source" placeholder="Friend's username" required>
+		<input type="datetime-local" id="transfer-from" required>
+		<input type="datetime-local" id="transfer-to" required>
+		<button type="submit">Transfer</button>
+	</form>
+	<pre id="transfer-result"></pre>
+
+	<hr>
+
+	<h2>Real-Time Sync</h2>
+	<input type="text" id="sync-source" placeholder="Friend's username">
+	<button id="sync-start-btn">Start</button>
+	<button id="sync-stop-btn">Stop</button>
+	<pre id="sync-result"></pre>
+
+	<script>
+		async function checkAuth() {
+			const res = await fetch('/auth/me');
+			const data = await res.json();
+			const section = document.getElementById('auth-section');
+			if (data.username) {
+				section.innerHTML = `Logged in as <strong>${data.username}</strong>`;
+			} else {
+				section.innerHTML = `<a href="/auth/login">Log in with Last.fm</a>`;
+			}
+		}
+		checkAuth();
+
+		document.getElementById('transfer-form').addEventListener('submit', async (e) => {
+			e.preventDefault();
+			const source_user = document.getElementById('transfer-source').value;
+			const fromVal = document.getElementById('transfer-from').value;
+			const toVal = document.getElementById('transfer-to').value;
+
+			const from = Math.floor(new Date(fromVal).getTime() / 1000);
+			const to = Math.floor(new Date(toVal).getTime() / 1000);
+
+			const resultEl = document.getElementById('transfer-result');
+			resultEl.textContent = 'Transferring...';
+
+			try {
+				const res = await fetch('/transfer', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ source_user, from, to }),
+				});
+				const data = await res.json();
+				resultEl.textContent = JSON.stringify(data, null, 2);
+			} catch (err) {
+				resultEl.textContent = `Error: ${err}`;
+			}
+		});
+
+		document.getElementById('sync-start-btn').addEventListener('click', async () => {
+			const source_user = document.getElementById('sync-source').value;
+			const resultEl = document.getElementById('sync-result');
+			resultEl.textContent = 'Starting...';
+
+			try {
+				const res = await fetch('/sync/start', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ source_user }),
+				});
+				const data = await res.json();
+				resultEl.textContent = JSON.stringify(data, null, 2);
+			} catch (err) {
+				resultEl.textContent = `Error: ${err}`;
+			}
+		});
+
+		document.getElementById('sync-stop-btn').addEventListener('click', async () => {
+			const resultEl = document.getElementById('sync-result');
+			resultEl.textContent = 'Stopping...';
+
+			try {
+				const res = await fetch('/sync/stop', { method: 'POST' });
+				const data = await res.json();
+				resultEl.textContent = JSON.stringify(data, null, 2);
+			} catch (err) {
+				resultEl.textContent = `Error: ${err}`;
+			}
+		});
+	</script>
+</body>
+</html>
