@@ -1,4 +1,3 @@
-# BuddyFM
 A Last.fm tool that allows you to listen with friends!
 ---
 ### Given a start and end time, scrobble all the tracks your friend did!
