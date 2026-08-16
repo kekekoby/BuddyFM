@@ -16,3 +16,10 @@ A Last.fm tool that helps you scrobble with friends!
 - [ ] Logout
 - [ ] Proper error handling... 
 - [ ] POSSIBLE BUG: (Real time sync) if someone is looping a track, it'll only be scrobbled once (currently checks if a track.artist and track.name has changed to consider it as a new scrobble)
+
+### Implemented:
+- [X] Authentication
+- [X] Get scrobbles
+- [X] Transfer scrobbles
+- [X] Real time sync
+- [X] Basic HTML
