@@ -75,6 +75,21 @@ async function getAllRecentTracks(user, from, to) {
 	return all_tracks;
 }
 
+async function getLatestTrack(user) {
+	const params = { api_key: API_KEY, user: user, limit: 1, page: 1, format: 'json'};
+	const queryString = new URLSearchParams(params).toString();
+	const url = `${BASE_URL}?method=user.getrecenttracks&${queryString}`;
+
+	const response = await fetch(url);
+	if (!response.ok) throw new Error(`Error: ${response.status}`);
+	const data = await response.json();
+
+	const track = data.recenttracks.track;
+
+	if (!track) return null;
+	return { artist: track.artist['#text'], name: track.name, nowPlaying: !!(track['@attr'] && track['@attr'].nowplaying === 'true') };
+}
+
 // can only process up to 50 tracks
 async function scrobbleTracks(session_key, tracks) {
 	const params = { api_key: API_KEY, sk: session_key, method: 'track.scrobble' };
@@ -121,4 +136,5 @@ module.exports = {
 	getSession,
 	getAllRecentTracks,
 	scrobbleTracks,
+	getLatestTrack,
 };
