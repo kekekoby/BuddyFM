@@ -75,16 +75,16 @@ async function getAllRecentTracks(user, from, to) {
 	return all_tracks;
 }
 
-async function scrobbleTrack(session_key, tracks) {
+async function scrobbleTracks(session_key, tracks) {
 	// can only process up to 50 tracks
 
-	const params = { api_key: API_KEY, session_key: session_key, method: 'track.scrobble' };
+	const params = { api_key: API_KEY, sk: session_key, method: 'track.scrobble' };
 
-	tracks.forEach(track, i) => {
+	tracks.forEach((track, i) => {
 		params[`artist[${i}]`] = track.artist;
 		params[`track[${i}]`] = track.track;
 		params[`timestamp[${i}]`] = track.timestamp;
-	}
+	});
 
 	const api_sig = signRequest(params);
 	const web_params = { ...params, format: 'json', api_sig: api_sig };
@@ -118,4 +118,5 @@ module.exports = {
 	BASE_URL,
 	signRequest,
 	getSession,
+	scrobbleTracks,
 };
