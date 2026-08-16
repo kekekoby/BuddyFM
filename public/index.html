@@ -34,7 +34,10 @@
 			const data = await res.json();
 			const section = document.getElementById('auth-section');
 			if (data.username) {
-				section.innerHTML = `Logged in as <strong>${data.username}</strong>`;
+				section.innerHTML = `Logged in as <strong>${data.username}</strong> <button id="logout-btn">Log out</button>`;
+				document.getElementById('logout-btn').addEventListener('click', async () => {
+					await fetch('/auth/logout', { method: 'POST' });
+					checkAuth(); });
 			} else {
 				section.innerHTML = `<a href="/auth/login">Log in with Last.fm</a>`;
 			}

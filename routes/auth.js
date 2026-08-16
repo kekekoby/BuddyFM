@@ -28,4 +28,13 @@ router.get('/me', (req, res) => {
 	res.json({ username: req.session.username || null });
 });
 
+router.post('/logout', (req, res) => {
+	req.session.destroy((error) => {
+		if (error) { console.error(`Error: ${error}`); return res.status(500).send('Logout error'); }
+
+		res.clearCookie('connect.sid');
+		res.json({ status: 'logged out'});
+	})
+})
+
 module.exports = router;
