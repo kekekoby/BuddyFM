@@ -13,14 +13,14 @@ async function poll() {
 			if (!is_track_changed) continue;
 
 			const receiving_user = db.prepare('SELECT session_key FROM users WHERE lastfm_username = ?').get(session.to_receive_user);
-			if (!to_receive_user) continue;
+			if (!receiving_user) continue;
 
 			// new now playing for fetched user, scrobble the last track saved in the db
 			if (session.curr_track && session.curr_artist) {
 				await scrobbleTracks(receiving_user.session_key, [{
 					artist: session.curr_artist,
 					track: session.curr_track,
-					timestampe: sessions.curr_startsat
+					timestamp: session.curr_startsat
 				}]);
 			}
 

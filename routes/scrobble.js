@@ -9,6 +9,7 @@ router.post('/transfer', async (req, res) => {
 
 	const { source_user, from, to } = req.body;
 	const user = db.prepare('SELECT session_key FROM users WHERE lastfm_username = ?').get(req.session.username);
+	if (!user) { res.json(-1); }
 
 	const fetched_tracks = await getAllRecentTracks(source_user, from, to);
 	const formatted_tracks = fetched_tracks
@@ -45,7 +46,7 @@ router.post('/sync/stop', async (req, res) => {
 	db.prepare("UPDATE user_connections SET status = 'stopped' WHERE to_receive_user = ? AND status = 'active'")
     	.run(req.session.username);
 
-    res.json({ status: 'stopped', source_user });
+    res.json({ status: 'stopped' });
 })
 
 module.exports = router;

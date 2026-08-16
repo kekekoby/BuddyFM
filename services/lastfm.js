@@ -84,7 +84,7 @@ async function getLatestTrack(user) {
 	if (!response.ok) throw new Error(`Error: ${response.status}`);
 	const data = await response.json();
 
-	const track = data.recenttracks.track;
+	const track = data.recenttracks.track[0];
 
 	if (!track) return null;
 	return { artist: track.artist['#text'], name: track.name, nowPlaying: !!(track['@attr'] && track['@attr'].nowplaying === 'true') };
