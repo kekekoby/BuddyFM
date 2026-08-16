@@ -8,7 +8,6 @@ A Last.fm tool that helps you scrobble with friends!
 ---
 ### TODO
 - [ ] Logout
-- [ ] Check for duplicated scrobblings, i.e., someones just spamming the scrobble transfer feature
 - [ ] Limit real time sync to only one connection at a time
 - [ ] Limit scrobble transfer to 24-hour periods
 - [ ] Edit db to end real time sync sessions once tab is closed or etc
@@ -23,3 +22,4 @@ A Last.fm tool that helps you scrobble with friends!
 - [X] Real time sync
 - [X] Basic HTML
 - [X] Add 'Scrobbling now' to receiving user during real time sync
+- [X] Check for duplicated scrobblings, i.e., someones just spamming the scrobble transfer feature

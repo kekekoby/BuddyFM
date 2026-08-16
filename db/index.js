@@ -18,16 +18,6 @@ db.exec(`
 `);
 
 db.exec(`
-  CREATE TABLE IF NOT EXISTS fetched_scrobbles (
-    to_fetch_user TEXT NOT NULL,
-    to_receive_user TEXT NOT NULL UNIQUE,
-    artist TEXT NOT NULL UNIQUE,
-    track TEXT NOT NULL UNIQUE,
-    timestamp TIMEDATE UNIQUE PRIMARY KEY
-  );
-`);
-
-db.exec(`
   CREATE TABLE IF NOT EXISTS user_connections (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     to_fetch_user TEXT NOT NULL,
