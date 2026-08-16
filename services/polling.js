@@ -1,5 +1,5 @@
 const db = require('../db/index.js');
-const { getLatestTrack, scrobbleTracks } = require('./lastfm.js');
+const { getLatestTrack, scrobbleTracks, updateNowPlaying } = require('./lastfm.js');
 
 async function poll() {
 	const active_sessions = db.prepare("SELECT * FROM user_connections WHERE status = 'active'").all();
@@ -23,6 +23,8 @@ async function poll() {
 					timestamp: session.curr_startsat
 				}]);
 			}
+
+			await updateNowPlaying(receiving_user.session_key, { artist: latest.artist, track: latest.name });
 
 			db.prepare(`
 				UPDATE user_connections
