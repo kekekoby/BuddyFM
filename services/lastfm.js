@@ -23,7 +23,7 @@ async function getSession(token) {
 	const params = { api_key: API_KEY, method: 'auth.getSession', token };
 	const api_sig = signRequest(params);
 
-	const web_params = { ...params, format: "json", api_sig: api_sig };
+	const web_params = { ...params, format: 'json', api_sig: api_sig };
 	const queryString = new URLSearchParams(web_params).toString();
 	const url = `${BASE_URL}?${queryString}`;
 
@@ -42,7 +42,7 @@ async function getSession(token) {
 }
 
 async function getRecentTracks(user, from, to, page) {
-	const params = { api_key: API_KEY, user: user, from: from, to: to, format: 'json' };
+	const params = { api_key: API_KEY, user: user, from: from, to: to, page: page, limit: 200, format: 'json' };
 	const queryString = new URLSearchParams(params).toString();
 	const url = `${BASE_URL}?method=user.getrecenttracks&${queryString}`;
 
@@ -55,7 +55,7 @@ async function getRecentTracks(user, from, to, page) {
 		const data = await response.json();
 
 		try {
-			return { tracks: data.recenttracks.track, total_pages: parseInt(data.recenttracks['@attr'].totalPages, 10);
+			return { tracks: data.recenttracks.track, total_pages: parseInt(data.recenttracks['@attr'].totalPages, 10)};
 		} catch (error) { console.error('No session'); return error; }
 	} catch (error) { console.error(`Fetch error: ${error}`); return error; }
 }
@@ -71,6 +71,45 @@ async function getAllRecentTracks(user, from, to) {
 		total_pages = result.total_pages;
 		page++;
 	}
+
+	return all_tracks;
+}
+
+async function scrobbleTrack(session_key, tracks) {
+	// can only process up to 50 tracks
+
+	const params = { api_key: API_KEY, session_key: session_key, method: 'track.scrobble' };
+
+	tracks.forEach(track, i) => {
+		params[`artist[${i}]`] = track.artist;
+		params[`track[${i}]`] = track.track;
+		params[`timestamp[${i}]`] = track.timestamp;
+	}
+
+	const api_sig = signRequest(params);
+	const web_params = { ...params, format: 'json', api_sig: api_sig };
+
+	try {
+		const response = await fetch(BASE_URL, { method: 'POST', body: new URLSearchParams(web_params) });
+		if (!response.ok) { throw new Error(`Error: ${response.status}`); }
+
+		const data = await response.json();
+
+		if (!data.scrobbles) {
+			console.error(`Error: ${data.message}`);
+			return data.message;
+		}
+
+		const raw = data.scrobbles.scrobble;
+		const results = Array.isArray(raw) ? raw : [raw];
+
+		results.forEach((result) => {
+			const entry = { artist: result.artist['#text'],
+							track: result.track['#text'],
+							timestamp: parseInt(result.timestamp, 10) };
+
+		});
+	} catch (error) { console.error(`Error: ${error}`); return error; }
 }
 
 module.exports = {
