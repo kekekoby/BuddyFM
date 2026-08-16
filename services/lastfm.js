@@ -128,6 +128,20 @@ async function scrobbleTracks(session_key, tracks) {
 	} catch (error) { console.error(`Error: ${error}`); return error; }
 }
 
+async function updateNowPlaying(session_key, track) {
+	const params = { api_key: API_KEY, sk: session_key, method: 'track.updateNowPlaying', artist: track.artist, track: track.track };
+	const api_sig = signRequest(params);
+	const web_params = { ...params, format: 'json', api_sig: api_sig };
+
+	try {
+		const response = await fetch(BASE_URL, { method: 'POST', body: new URLSearchParams(web_params)});
+		if (!response.ok) { throw new Error(`Error ${response.status}`); }
+
+		const data = await response.json();
+		return data.nowplaying;
+	} catch (error) { console.error(`Error: ${error}`); return error; }
+}
+
 module.exports = {
 	API_KEY,
 	SHARED_SECRET,
@@ -137,4 +151,5 @@ module.exports = {
 	getAllRecentTracks,
 	scrobbleTracks,
 	getLatestTrack,
+	updateNowPlaying,
 };
