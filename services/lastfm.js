@@ -108,6 +108,8 @@ async function scrobbleTracks(session_key, tracks) {
 							timestamp: parseInt(result.timestamp, 10) };
 
 		});
+
+		return 0;
 	} catch (error) { console.error(`Error: ${error}`); return error; }
 }
 
@@ -117,5 +119,6 @@ module.exports = {
 	BASE_URL,
 	signRequest,
 	getSession,
+	getAllRecentTracks,
 	scrobbleTracks,
 };
