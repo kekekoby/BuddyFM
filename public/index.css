@@ -177,8 +177,17 @@ hr { height: 15px; display: block; background-color: var(--dark-beige); border-w
     transform: translate3d(85px,0,0);
   }
 }
-/*Shrinking for mobile*/
+
+
+/*mobile*/
 @media (max-width: 768px) {
+	#main-section {
+		min-height: auto;
+		padding: 2em 1.5em;
+	}
+	h1 {
+		font-size: 2.5em;
+	}
   .onde {
     height:40px;
     min-height:40px;
