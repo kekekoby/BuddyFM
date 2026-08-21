@@ -1,5 +1,4 @@
-A Last.fm tool that helps you scrobble with friends!
-https://buddyfm.up.railway.app/
+[BuddyFM](https://buddyfm.up.railway.app/): A Last.fm tool that helps you scrobble with friends!
 ---
 ### Given a start and end time, scrobble all the tracks your friend did!
 - Say you were with a friend from 1PM - 5PM, input the start and end time and then all their scrobbles from that time period will go to your account! Alongside the correct timestamp.
