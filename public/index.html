@@ -35,6 +35,21 @@
 		<pre id="sync-result"></pre>
 	</div>
 
+	<div class="ondebox">
+	  <svg class="onde" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+	       viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+	    <defs>
+	      <path id="onda" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352Z" />
+	    </defs>
+	    <g class="parallaxonde">
+	      <use xlink:href="#onda" x="48" y="0" fill="rgba(255,2455,222,0.4)" />
+	      <use xlink:href="#onda" x="48" y="3" fill="rgba(255,2455,222,0.2)" />
+	      <use xlink:href="#onda" x="48" y="5" fill="rgba(255,2455,222,0.1)" />
+	      <use xlink:href="#onda" x="48" y="7" fill="#a31212" />
+	    </g>
+	  </svg>
+	</div>
+
 	<script>
 		async function checkAuth() {
 			const res = await fetch('/auth/me');
@@ -105,7 +120,7 @@
 					resultEl.textContent = `Error: ${data.error || 'Something went wrong'}`; } 
 				else {
 					resultEl.textContent = JSON.stringify(data, null, 2); }
-			} catch (err) { esultEl.textContent = `Error: ${err}`; }
+			} catch (err) { resultEl.textContent = `Error: ${err}`; }
 		});
 	</script>
 </body>
