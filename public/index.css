@@ -1,0 +1,122 @@
+:root {
+	--main-red: #e11515;
+	--main-beige: #fff5de;
+	--dark-beige: #c8ba9a;
+}
+
+/* divs */
+body {
+	background-color: var(--main-red);
+	text-align: center;
+}
+
+#main-section {
+	background-color: var(--main-beige);
+	border-radius: 15px;
+	box-sizing: border-box;
+	width: 90%;
+	max-width: 1100px;
+	margin-inline: auto;
+	padding: 3em 5em;
+	text-align: left;
+
+	font-family: "Stack Sans Text", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: <weight>;
+	font-style: normal;
+}
+
+#auth-section {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+/* txt */
+h1 {
+	color: var(--main-beige);
+	font-size: 3.5em;
+	margin:0.5em 0;
+
+	font-family: "Darumadrop One", sans-serif;
+	font-weight: 400;
+	font-style: normal;
+}
+
+h2 {
+	text-align: left;
+	color: black;
+}
+
+.username { color: var(--main-red); font-weight: bold; }
+
+#transfer-result, #sync-result { color: var(--main-red); }
+
+/* btns & inpt */
+#auth-section a, #auth-section button {
+	background-color: var(--main-red);
+	color: var(--main-beige);
+	border: none;
+	padding: 0.75em 2em;
+	border-radius: 0.4em;
+	font-weight: bold;
+	text-decoration: none;
+	display: inline-block;
+	cursor: pointer;
+}
+
+#transfer-source {
+	display: block;
+	width: 100%;
+	max-width: 300px;
+	margin-bottom: 0.75em;
+	padding: 0.5em;
+	box-sizing: border-box;
+}
+
+#transfer-from, #transfer-to {
+	display: inline-block;
+	width: auto;
+	padding: 0.5em;
+	box-sizing: border-box;
+	margin-bottom: 0.75em;
+	margin-right: 0.5em;
+}
+
+#sync-source {
+	display: block;
+	width: 100%;
+	max-width: 300px;
+	margin-bottom: 0.75em;
+	padding: 0.5em;
+	box-sizing: border-box;
+}
+
+#transfer-form, #sync-source, #sync-start-btn, #sync-stop-btn {
+	text-align: left;
+}
+
+#transfer-form button {
+	display: block;
+	background-color: var(--main-red);
+	color: var(--main-beige);
+	border: none;
+	padding: 0.5em 1.5em;
+	border-radius: 0.4em;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+#sync-start-btn, #sync-stop-btn {
+	background-color: var(--main-red);
+	color: var(--main-beige);
+	border: none;
+	padding: 0.5em 1.5em;
+	border-radius: 0.4em;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+/* others */
+hr { height: 15px; display: block; background-color: var(--dark-beige); border-width: 0px; margin-top: 1em; }
+

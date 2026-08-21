@@ -3,30 +3,37 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>BuddyFM</title>
+	<link rel="stylesheet" href="index.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&family=Stack+Sans+Text:wght@200..700&display=swap" rel="stylesheet">
 </head>
 <body>
 	<h1>BuddyFM!</h1>
 
-	<div id="auth-section"></div>
+	<div id="main-section">
 
-	<hr>
+		<div id="auth-section"></div>
 
-	<h2>Scrobble Transfer</h2>
-	<form id="transfer-form">
-		<input type="text" id="transfer-source" placeholder="Friend's username" required>
-		<input type="datetime-local" id="transfer-from" required>
-		<input type="datetime-local" id="transfer-to" required>
-		<button type="submit">Transfer</button>
-	</form>
-	<pre id="transfer-result"></pre>
+		<hr>
 
-	<hr>
+		<h2>Scrobble Transfer</h2>
+		<form id="transfer-form">
+			<input type="text" id="transfer-source" placeholder="Friend's username" required>
+			<input type="datetime-local" id="transfer-from" required>
+			<input type="datetime-local" id="transfer-to" required>
+			<button type="submit">Transfer</button>
+		</form>
+		<pre id="transfer-result"></pre>
 
-	<h2>Real-Time Sync</h2>
-	<input type="text" id="sync-source" placeholder="Friend's username">
-	<button id="sync-start-btn">Start</button>
-	<button id="sync-stop-btn">Stop</button>
-	<pre id="sync-result"></pre>
+		<hr>
+
+		<h2>Real-Time Sync</h2>
+		<input type="text" id="sync-source" placeholder="Friend's username">
+		<button id="sync-start-btn">Start</button>
+		<button id="sync-stop-btn">Stop</button>
+		<pre id="sync-result"></pre>
+	</div>
 
 	<script>
 		async function checkAuth() {
@@ -34,7 +41,7 @@
 			const data = await res.json();
 			const section = document.getElementById('auth-section');
 			if (data.username) {
-				section.innerHTML = `Logged in as <strong>${data.username}</strong> <button id="logout-btn">Log out</button>`;
+				section.innerHTML = `<span>Logged in as <span class="username">${data.username}</span></span> <button id="logout-btn">Log out</button>`;
 				document.getElementById('logout-btn').addEventListener('click', async () => {
 					await fetch('/auth/logout', { method: 'POST' });
 					checkAuth(); });
