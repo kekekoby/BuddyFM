@@ -27,10 +27,10 @@ router.post('/transfer', async (req, res) => {
 
 	let result = 0;
 	for (let i = 0; i < formatted_tracks.length; i+= 50) {
-		result = await scrobbleTracks(user.session_key, formatted_tracks.slice(i, i+50));
+		result += await scrobbleTracks(user.session_key, formatted_tracks.slice(i, i+50));
 	}
 
-	res.json(result);
+	res.json({ message: `Scrobbled ${result} tracks!`});
 });
 
 router.post('/sync/start', async (req, res) => {
@@ -45,16 +45,18 @@ router.post('/sync/start', async (req, res) => {
 	db.prepare('INSERT INTO user_connections (to_fetch_user, to_receive_user, status) VALUES (?, ?, ?)')
 		.run(source_user, req.session.username, 'active');
 
-	res.json({ status: 'started', source_user });
+	res.json({ message: `Listening along with ${source_user}!` });
 })
 
 router.post('/sync/stop', async (req, res) => {
 	if (!req.session.username) { return res.status(401).json({ error: 'Not logged in' }); }
 
+    const source_user = db.prepare("SELECT to_fetch_user FROM user_connections WHERE to_receive_user = ? AND status = 'active'").get(req.session.username);
+
 	db.prepare("UPDATE user_connections SET status = 'stopped' WHERE to_receive_user = ? AND status = 'active'")
     	.run(req.session.username);
 
-    res.json({ status: 'stopped' });
+    res.json({ message: `Stopped listening along with ${source_user.to_fetch_user}!` });
 })
 
 module.exports = router;

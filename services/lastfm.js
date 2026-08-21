@@ -93,6 +93,7 @@ async function getLatestTrack(user) {
 // can only process up to 50 tracks
 async function scrobbleTracks(session_key, tracks) {
 	const params = { api_key: API_KEY, sk: session_key, method: 'track.scrobble' };
+	let num_scrobbles = 0;
 
 	tracks.forEach((track, i) => {
 		params[`artist[${i}]`] = track.artist;
@@ -121,10 +122,11 @@ async function scrobbleTracks(session_key, tracks) {
 			const entry = { artist: result.artist['#text'],
 							track: result.track['#text'],
 							timestamp: parseInt(result.timestamp, 10) };
+			num_scrobbles += 1;
 
 		});
 
-		return 0;
+		return num_scrobbles;
 	} catch (error) { console.error(`Error: ${error}`); return error; }
 }
 
