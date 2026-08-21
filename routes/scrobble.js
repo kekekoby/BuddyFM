@@ -5,7 +5,7 @@ const { getAllRecentTracks, scrobbleTracks } = require('../services/lastfm.js');
 const db = require('../db/index.js');
 
 router.post('/transfer', async (req, res) => {
-	if (!req.session.username) { return res.status(401).send('Not logged in'); }
+	if (!req.session.username) { return res.status(401).json({ error: 'Not logged in' }); }
 
 	const { source_user, from, to } = req.body;
 
@@ -14,7 +14,7 @@ router.post('/transfer', async (req, res) => {
 	if (from > to) { return res.status(400).json({ error: "To cannot be earlier than from" }); }
 
 	const user = db.prepare('SELECT session_key FROM users WHERE lastfm_username = ?').get(req.session.username);
-	if (!user) { res.json(-1); }
+	if (!user) { return res.status(401).json({ error: 'User not found, please log in again' }); }
 
 	const fetched_tracks = await getAllRecentTracks(source_user, from, to);
 	const formatted_tracks = fetched_tracks
@@ -34,7 +34,7 @@ router.post('/transfer', async (req, res) => {
 });
 
 router.post('/sync/start', async (req, res) => {
-	if (!req.session.username) { return res.status(401).send('Not logged in'); }
+	if (!req.session.username) { return res.status(401).json({ error: 'Not logged in' }); }
 
 	const { source_user } = req.body;
 	const user = db.prepare('SELECT session_key FROM users WHERE lastfm_username = ?').get(req.session.username);
@@ -49,7 +49,7 @@ router.post('/sync/start', async (req, res) => {
 })
 
 router.post('/sync/stop', async (req, res) => {
-	if (!req.session.username) { return res.status(401).send('Not logged in.'); }
+	if (!req.session.username) { return res.status(401).json({ error: 'Not logged in' }); }
 
 	db.prepare("UPDATE user_connections SET status = 'stopped' WHERE to_receive_user = ? AND status = 'active'")
     	.run(req.session.username);

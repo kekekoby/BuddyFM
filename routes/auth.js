@@ -14,7 +14,7 @@ router.get('/callback', async (req, res) => {
 	try {
 		const session_info = await getSession(token);
 		if (!session_info || !session_info.session_key) {
-		  return res.status(400).send('Login failed');
+		  return res.status(400).json({ error: 'Login failed' });
 		}
 
 		db.prepare('INSERT OR REPLACE INTO users (lastfm_username, session_key) VALUES (?, ?)')

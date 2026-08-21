@@ -38,9 +38,7 @@
 				document.getElementById('logout-btn').addEventListener('click', async () => {
 					await fetch('/auth/logout', { method: 'POST' });
 					checkAuth(); });
-			} else {
-				section.innerHTML = `<a href="/auth/login">Log in with Last.fm</a>`;
-			}
+			} else { section.innerHTML = `<a href="/auth/login">Log in with Last.fm</a>`; }
 		}
 		checkAuth();
 
@@ -63,10 +61,11 @@
 					body: JSON.stringify({ source_user, from, to }),
 				});
 				const data = await res.json();
-				resultEl.textContent = JSON.stringify(data, null, 2);
-			} catch (err) {
-				resultEl.textContent = `Error: ${err}`;
-			}
+				if (!res.ok) {
+					resultEl.textContent = `Error: ${data.error || 'Something went wrong'}`; } 
+				else {
+					resultEl.textContent = JSON.stringify(data, null, 2); }
+			} catch (err) { resultEl.textContent = `Error: ${err}`; }
 		});
 
 		document.getElementById('sync-start-btn').addEventListener('click', async () => {
@@ -81,10 +80,11 @@
 					body: JSON.stringify({ source_user }),
 				});
 				const data = await res.json();
-				resultEl.textContent = JSON.stringify(data, null, 2);
-			} catch (err) {
-				resultEl.textContent = `Error: ${err}`;
-			}
+				if (!res.ok) {
+					resultEl.textContent = `Error: ${data.error || 'Something went wrong'}`; } 
+				else {
+					resultEl.textContent = JSON.stringify(data, null, 2); }
+			} catch (err) { resultEl.textContent = `Error: ${err}`; }
 		});
 
 		document.getElementById('sync-stop-btn').addEventListener('click', async () => {
@@ -94,10 +94,11 @@
 			try {
 				const res = await fetch('/sync/stop', { method: 'POST' });
 				const data = await res.json();
-				resultEl.textContent = JSON.stringify(data, null, 2);
-			} catch (err) {
-				resultEl.textContent = `Error: ${err}`;
-			}
+				if (!res.ok) {
+					resultEl.textContent = `Error: ${data.error || 'Something went wrong'}`; } 
+				else {
+					resultEl.textContent = JSON.stringify(data, null, 2); }
+			} catch (err) { esultEl.textContent = `Error: ${err}`; }
 		});
 	</script>
 </body>
