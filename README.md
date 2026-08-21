@@ -11,4 +11,5 @@ A Last.fm tool that helps you scrobble with friends!
 - [ ] Edit db to end real time sync sessions once tab is closed or etc
 - [ ] No proper error when user DNE
 - [ ] POSSIBLE BUG: (Real time sync) if someone is looping a track, it'll only be scrobbled once (currently checks if a track.artist and track.name has changed to consider it as a new scrobble)
+- [ ] now playing.... in the real time sync
 -->

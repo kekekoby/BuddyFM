@@ -9,6 +9,8 @@ const authRoutes = require('./routes/auth.js');
 const scrobbleRoutes = require('./routes/scrobble.js');
 const { startPoll } = require('./services/polling.js');
 
+app.set('trust proxy', 1);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -16,7 +18,7 @@ app.use(
 	secret: process.env.SESSION_SECRET,
 	resave: false,
 	saveUninitialized: false,
-	cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 },
+	cookie: { maxAge: 1000 * 60 * 60 * 24 * 7, secure: true, sameSite: 'lax' },
   })
 );
 
