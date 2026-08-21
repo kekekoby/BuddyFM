@@ -8,6 +8,11 @@ router.post('/transfer', async (req, res) => {
 	if (!req.session.username) { return res.status(401).send('Not logged in'); }
 
 	const { source_user, from, to } = req.body;
+
+	const HRS24 = 24 * 60 * 60;
+	if (to - from > HRS24) { return res.status(400).json({ error: "Date range cannot go over 24 hours" }); }
+	if (from > to) { return res.status(400).json({ error: "To cannot be earlier than from" }); }
+
 	const user = db.prepare('SELECT session_key FROM users WHERE lastfm_username = ?').get(req.session.username);
 	if (!user) { res.json(-1); }
 
