@@ -34,7 +34,10 @@ router.post('/sync/start', async (req, res) => {
 	const { source_user } = req.body;
 	const user = db.prepare('SELECT session_key FROM users WHERE lastfm_username = ?').get(req.session.username);
 
-	db.prepare('INSERT OR REPLACE INTO user_connections (to_fetch_user, to_receive_user, status) VALUES (?, ?, ?)')
+	db.prepare("UPDATE user_connections SET status = 'stopped' WHERE to_receive_user = ? AND status = 'active'")
+		.run(req.session.username);
+
+	db.prepare('INSERT INTO user_connections (to_fetch_user, to_receive_user, status) VALUES (?, ?, ?)')
 		.run(source_user, req.session.username, 'active');
 
 	res.json({ status: 'started', source_user });
